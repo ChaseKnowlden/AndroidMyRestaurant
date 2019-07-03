@@ -1,5 +1,6 @@
 package com.example.androidmyrestaurant.Retrofit;
 
+import com.example.androidmyrestaurant.Model.RestaurantModel;
 import com.example.androidmyrestaurant.Model.UpdateUserModel;
 import com.example.androidmyrestaurant.Model.UserModel;
 
@@ -14,6 +15,9 @@ public interface IMyRestaurantAPI {
     @GET("user")
     Observable<UserModel> getUser(@Query("key") String apiKey,
                                   @Query("fbid") String fbid);
+
+    @GET("restaurant")
+    Observable<RestaurantModel> getRestaurant(@Query("key") String apiKey);
 
     @POST("user")
     @FormUrlEncoded
