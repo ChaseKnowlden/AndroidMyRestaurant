@@ -188,6 +188,7 @@ public class HomeActivity extends AppCompatActivity
                 .setNegativeButton("CANCEl", (dialogInterface, i) -> dialogInterface.dismiss())
                 .setPositiveButton("OK", (dialogInterface, i) -> {
                     Common.currentUser = null;
+                    Common.currentRestaurant = null;
 
                     AccountKit.logOut();
                     Intent intent = new Intent(HomeActivity.this,MainActivity.class);

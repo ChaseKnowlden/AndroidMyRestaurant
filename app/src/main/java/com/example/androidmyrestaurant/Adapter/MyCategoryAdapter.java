@@ -1,7 +1,6 @@
 package com.example.androidmyrestaurant.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,63 +13,58 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidmyrestaurant.Common.Common;
 import com.example.androidmyrestaurant.Interface.IOnRecyclerViewClickListener;
-import com.example.androidmyrestaurant.MenuActivity;
-import com.example.androidmyrestaurant.Model.EventBus.MenuItemEvent;
-import com.example.androidmyrestaurant.Model.Restaurant;
+import com.example.androidmyrestaurant.Model.Category;
 import com.example.androidmyrestaurant.R;
 import com.squareup.picasso.Picasso;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class MyRestaurantAdapter extends RecyclerView.Adapter<MyRestaurantAdapter.MyViewHolder> {
+public class MyCategoryAdapter extends RecyclerView.Adapter<MyCategoryAdapter.MyViewHolder> {
 
     Context context;
-    List<Restaurant> restaurantList;
+    List<Category> categoryList;
 
-    public MyRestaurantAdapter(Context context, List<Restaurant> restaurantList) {
+    public MyCategoryAdapter(Context context, List<Category> categoryList) {
         this.context = context;
-        this.restaurantList = restaurantList;
+        this.categoryList = categoryList;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(context)
-                .inflate(R.layout.layout_restaurant,parent,false);
+                .inflate(R.layout.layout_category,parent,false);
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Picasso.get().load(restaurantList.get(position).getImage()).into(holder.img_restaurant);
-        holder.txt_restaurant_address.setText(new StringBuilder(restaurantList.get(position).getAddress()));
-        holder.txt_restaurant_name.setText(new StringBuilder(restaurantList.get(position).getName()));
+        Picasso.get().load(categoryList.get(position).getImage()).into(holder.img_category);
+        holder.txt_category.setText(categoryList.get(position).getName());
 
-        holder.setListener((view, position1) -> {
-            Common.currentRestaurant = restaurantList.get(position);
-            EventBus.getDefault().postSticky(new MenuItemEvent(true,restaurantList.get(position)));
-            context.startActivity(new Intent(context, MenuActivity.class));
+        holder.setListener(new IOnRecyclerViewClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Toast.makeText(context, ""+categoryList.get(position).getName(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     @Override
     public int getItemCount() {
-        return restaurantList.size();
+        return categoryList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.txt_restaurant_name)
-        TextView txt_restaurant_name;
-        @BindView(R.id.txt_restaurant_address)
-        TextView txt_restaurant_address;
-        @BindView(R.id.img_restaurant)
-        ImageView img_restaurant;
+        @BindView(R.id.img_category)
+        ImageView img_category;
+        @BindView(R.id.txt_category)
+        TextView txt_category;
 
         IOnRecyclerViewClickListener listener;
 
@@ -89,6 +83,20 @@ public class MyRestaurantAdapter extends RecyclerView.Adapter<MyRestaurantAdapte
         @Override
         public void onClick(View v) {
             listener.onClick(v,getAdapterPosition());
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (categoryList.size() == 1)
+            return Common.DEFAULT_COLUMN_COUNT;
+        else
+        {
+            if (categoryList.size() % 2 == 0)
+                return Common.DEFAULT_COLUMN_COUNT;
+            else
+                return (position > 1 && position == categoryList.size()-1) ? Common.FULL_WIDTH_COLUMN:Common.DEFAULT_COLUMN_COUNT;
+
         }
     }
 }

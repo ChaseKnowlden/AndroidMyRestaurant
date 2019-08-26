@@ -6,7 +6,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Toast;
 
 import com.example.androidmyrestaurant.Common.Common;
