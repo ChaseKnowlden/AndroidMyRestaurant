@@ -43,9 +43,13 @@ public class FoodListActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    MyFoodAdapter adapter;
+
     @Override
     protected void onDestroy() {
         compositeDisposable.clear();
+        if (adapter != null)
+            adapter.onStop();
         super.onDestroy();
     }
 
